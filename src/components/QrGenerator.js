@@ -7,7 +7,7 @@ export default function QrGenerator({text}) {
                 id="qrCode"
                 value={text}
                 size={200}
-                bgColor={"#00ff00"}
+                bgColor={"#ffffff"}
                 level={"H"}
             />
         </p>
