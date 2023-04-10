@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useImmer } from 'use-immer';
 import QrGenerator from "./QrGenerator";
-import TextToQR from "./TextToQR";
 
 export default function PasswordGenerator() {
     let [something, setSomething] = useState({});
@@ -9,7 +8,8 @@ export default function PasswordGenerator() {
         passLength: 6,
         smallLetters: true,
         capitalLetters: false,
-        numbers: false
+        numbers: false,
+        symbols: false
     });
 
 
@@ -18,6 +18,7 @@ export default function PasswordGenerator() {
         let alphabetsLower = "abcdefghijklmnopqrstuvwxyz";
         let alphabetsUpper = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
         let numbers = "1234567890";
+        let symbols = "!&().?$%";
         let generateFrom = '';
         if (isIncluded.capitalLetters) {
             generateFrom += alphabetsUpper;
@@ -28,6 +29,9 @@ export default function PasswordGenerator() {
         if (isIncluded.numbers) {
             generateFrom += numbers;
         }
+        if (isIncluded.symbols) {
+            generateFrom += symbols;
+        }
         for (let i = 0; i < isIncluded.passLength; i++) {
             pass += generateFrom.charAt(Math.floor(Math.random() * generateFrom.length));
         }
@@ -36,7 +40,7 @@ export default function PasswordGenerator() {
 
     function handleClickGenerate(e) {
         e.preventDefault();
-        setSomething({...something});
+        setSomething({ ...something });
 
     }
     function handleOnLengthChange(e) {
@@ -59,11 +63,14 @@ export default function PasswordGenerator() {
             draft.numbers = e.target.checked;
         })
     }
+    function handleSymbols(e) {
+        updateIsIncluded(draft => {
+            draft.symbols = e.target.checked;
+        })
+    }
 
     let generatedPass = randomPassGenerator(isIncluded);
-    // function handleInputChange(e) {
-    //     setGeneratedPass(e.target.value);
-    // }
+
     return (
         <section className="container">
             <h2 className="my-3 ">Password Generator</h2>
@@ -75,19 +82,15 @@ export default function PasswordGenerator() {
                     <div>
                         <input
                             type="text"
-                            // onChange={(e) => { handleInputChange(e) }}
                             readOnly
                             className="col-auto form-control"
                             id="genpass"
-                            aria-describedby="emailHelp"
                             value={generatedPass}
                         />
                         <button onClick={(e) =>
                             handleClickGenerate(e)} className="my-2 col-auto btn btn-primary" >Generate Password</button>
                     </div>
-                    <div id="emailHelp" className="form-text">
-                        We'll never share your password with anyone else.
-                    </div>
+
 
                 </div>
                 <div className="row my-3">
@@ -115,14 +118,12 @@ export default function PasswordGenerator() {
 
                 <div className="mb-3 form-check">
                     <label className="form-check-label" htmlFor="exampleCheck1">
-                        Check me out
+                        Include Symbols {`(!&().?$%)`}
                     </label>
-                    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
+                    <input onClick={(e) => handleSymbols(e)} type="checkbox" className="form-check-input" id="exampleCheck1" />
                 </div>
             </form>
-            <QrGenerator text={generatedPass}/>
-            <TextToQR />
-
+            <QrGenerator text={generatedPass} />
         </section>
     );
 }
