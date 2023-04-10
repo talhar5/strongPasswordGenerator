@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useImmer } from 'use-immer';
 import QrGenerator from "./QrGenerator";
+import TextToQR from "./TextToQR";
 
 export default function PasswordGenerator() {
     let [something, setSomething] = useState({});
@@ -120,6 +121,7 @@ export default function PasswordGenerator() {
                 </div>
             </form>
             <QrGenerator text={generatedPass}/>
+            <TextToQR />
 
         </section>
     );
